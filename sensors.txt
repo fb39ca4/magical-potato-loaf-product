@@ -1,0 +1,9 @@
+Limit Switch/Pushbutton
+	Black: Ground, White: Signal
+	When released signal is floating, when pressed, signal is at ground
+	Enable pullup resistor when using this.
+
+Encoders
+	Use pins 8,9 for encoder 0 and 10,11 for encoder 1
+
+
