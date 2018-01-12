@@ -1,3 +1,3 @@
 # Magical Potato Loaf Product
 
-Robot code for UBC Engineering Competition 2017
+Robot code for Western Engineering Competition 2018

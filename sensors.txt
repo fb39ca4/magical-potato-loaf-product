@@ -6,4 +6,3 @@ Limit Switch/Pushbutton
 Encoders
 	Use pins 8,9 for encoder 0 and 10,11 for encoder 1
 
-
