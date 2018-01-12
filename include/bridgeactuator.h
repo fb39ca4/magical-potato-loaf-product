@@ -2,10 +2,6 @@
 
 #include <hardware/servomotor.h>
 
-
-class BridgeActuator {
-public:
-
 	enum Direction {
 		None = 0,
 		North = 1,
@@ -13,6 +9,10 @@ public:
 		South = 3,
 		West = 4
 	};
+class BridgeActuator {
+public:
+
+
 private:
 	hardware::ServoMotor& m_motorNE;
 	hardware::ServoMotor& m_motorSW;
@@ -27,14 +27,8 @@ public:
 	bool isReady() {
 		return m_state == 0;
 	}
-	bool setSW(Direction dir) {
-		return true;
-	}
-	bool setNE(Direction dir) {
-		return true;
-	}
-	void warningLight(bool on) {
-		return;
-	}
+	bool setSW(Direction dir);
+	bool setNE(Direction dir);
+	void warningLight(bool on);
 	void tick();
 };

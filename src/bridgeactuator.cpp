@@ -5,6 +5,7 @@ BridgeActuator::BridgeActuator(hardware::ServoMotor& motorNE, hardware::ServoMot
 	m_bridgeNEPosition = Direction::South;
 	m_bridgeSWPosition = Direction::North;
 	m_waitUntil = millis();
+	warningLight(false);
 }
 
 bool BridgeActuator::boatCrossing(Direction in, Direction out) {
@@ -69,33 +70,55 @@ bool BridgeActuator::boatCrossing(Direction in, Direction out) {
 	}
 }
 
-void BridgeActuator::tick() {
-		switch (m_state) {
-		case 0:
-			break;
+void BridgeActuator::warningLight(bool on) {
+	digitalWrite(13, on);
+}
 
-		case 1:
-			warningLight(true);
-			m_waitUntil = millis() + 3000;
-			m_state++;
-		case 2:
-			if (millis() < m_waitUntil) {
-				break;
-			}
-			m_state++;
-		case 3:
-			if (!setSW(m_bridgeSWPosition)) {
-				break;
-			}
-			m_state++;
-		case 4:
-			if (setNE(m_bridgeNEPosition)) {
-				break;
-			}
-			m_state++;
-		case 5:
-			warningLight(false);
-			m_state = 0;
+
+bool BridgeActuator::setSW(Direction dir) {
+	int angle = 0;
+	if (dir == Direction::North) angle = 0;
+	if (dir == Direction::East) angle = 45;
+	if (dir == Direction::South) angle = 90;
+	if (dir == Direction::West) angle = 135;
+	return m_motorSW.setPosition(angle);
+}
+bool BridgeActuator::setNE(Direction dir) {
+	int angle = 0;
+	if (dir == Direction::North) angle = 0;
+	if (dir == Direction::East) angle = 45;
+	if (dir == Direction::South) angle = 90;
+	if (dir == Direction::West) angle = 135;
+	return m_motorNE.setPosition(angle);
+}
+
+void BridgeActuator::tick() {
+	switch (m_state) {
+	case 0:
+		break;
+
+	case 1:
+		warningLight(true);
+		m_waitUntil = millis() + 3000;
+		m_state++;
+	case 2:
+		if (millis() < m_waitUntil) {
 			break;
 		}
+		m_state++;
+	case 3:
+		if (!setSW(m_bridgeSWPosition)) {
+			break;
+		}
+		m_state++;
+	case 4:
+		if (!setNE(m_bridgeNEPosition)) {
+			break;
+		}
+		m_state++;
+	case 5:
+		warningLight(false);
+		m_state = 0;
+		break;
 	}
+}
