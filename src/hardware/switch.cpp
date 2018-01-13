@@ -8,12 +8,13 @@ Switch::Switch(uint8_t pin, uint8_t pressedState) {
 	m_pressedState = pressedState;
 	pinMode(pin, INPUT_PULLUP);
 	m_prevState = digitalRead(pin);
+	m_currentState = digitalRead(pin);
 	m_pressEvent = false;
 	m_releaseEvent = false;
 }
 
 bool Switch::get() const {
-	return digitalRead(m_pin) == m_pressedState;
+	return m_currentState;
 }
 
 bool Switch::pressed() const {
@@ -25,22 +26,22 @@ bool Switch::released() const {
 }
 
 void Switch::tick() {
-	bool currentState = get();
+	m_currentState = digitalRead(m_pin) == m_pressedState;
 
-	if ((currentState == true) && (currentState != m_prevState)) {
+	if ((m_currentState == true) && (m_currentState != m_prevState)) {
 		m_pressEvent = true;
 	}
 	else {
 		m_pressEvent = false;
 	}
 
-	if ((currentState == false) && (currentState != m_prevState)) {
+	if ((m_currentState == false) && (m_currentState != m_prevState)) {
 		m_releaseEvent = true;
 	}
 	else {
 		m_releaseEvent = false;
 	}
-	m_prevState = currentState;
+	m_prevState = m_currentState;
 }
 
 void Switch::printTo(Print& p) {

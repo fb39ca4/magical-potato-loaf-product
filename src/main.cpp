@@ -22,22 +22,28 @@ void setup(){
 	hardware::ServoMotor bridgeMotorNE(8, 5);
 	hardware::ServoMotor bridgeMotorSW(9, 5);
 
-	bridgeMotorNE.setPosition(0);
+	bridgeMotorNE.setPosition(65);
 	delay(2000);
-	bridgeMotorSW.setPosition(0);
+	bridgeMotorSW.setPosition(90);
 	delay(2000);
 
 	BridgeActuator bridgeActuator(bridgeMotorNE, bridgeMotorSW);
 	BridgeController bridgeController(bridgeActuator, switchN, switchE, switchS, switchW);
-	bridgeActuator.boatCrossing(Direction::North, Direction::West);
-
 	bool open = false;
 	while (true) {
+		switchN.tick();
+		switchE.tick();
+		switchS.tick();
+		switchW.tick();
 		bridgeMotorNE.tick();
 		bridgeMotorSW.tick();
 		bridgeActuator.tick();
-		bridgeController.tick();
-
+		if (switchN.pressed()) {
+			bridgeActuator.setNE(Direction::South);
+		}
+		if (switchE.pressed()) bridgeActuator.setNE(Direction::West);
+		if (switchS.pressed()) bridgeActuator.setSW(Direction::North);
+		if (switchW.pressed()) bridgeActuator.setSW(Direction::East);
 
 	
 		delay(30);

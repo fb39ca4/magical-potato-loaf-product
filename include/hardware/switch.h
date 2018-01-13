@@ -17,6 +17,7 @@ public:
 private:
 	uint8_t m_pin;
 	bool m_pressedState;
+	bool m_currentState;
 	bool m_prevState;
 	bool m_pressEvent;
 	bool m_releaseEvent;

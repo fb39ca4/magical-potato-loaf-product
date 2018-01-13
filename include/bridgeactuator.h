@@ -10,9 +10,6 @@
 		West = 4
 	};
 class BridgeActuator {
-public:
-
-
 private:
 	hardware::ServoMotor& m_motorNE;
 	hardware::ServoMotor& m_motorSW;
@@ -23,7 +20,8 @@ private:
 	unsigned long m_waitUntil;
 public:
 	BridgeActuator(hardware::ServoMotor& motorNE, hardware::ServoMotor& motorSW);
-	bool boatCrossing(Direction in, Direction out);
+	void boatCrossing(Direction in, Direction out);
+	void pedCrossing();
 	bool isReady() {
 		return m_state == 0;
 	}

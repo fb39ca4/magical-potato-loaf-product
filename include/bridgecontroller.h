@@ -6,11 +6,17 @@ class BridgeController {
 public:
 	BridgeController(BridgeActuator& actuator, hardware::Switch& switchN, hardware::Switch& switchE, hardware::Switch& switchS, hardware::Switch& switchW);
 	void tick();
+	Direction getLikely(Direction start, int rank);
+	void updateVector(Direction start, Direction end);
 private:
+	void stateScale();
 	BridgeActuator& m_actuator;
 	hardware::Switch& m_switchN;
 	hardware::Switch& m_switchE;
 	hardware::Switch& m_switchS;
 	hardware::Switch& m_switchW;
-
+	unsigned long m_pedestrianTimer = 0;
+	unsigned long m_boatTimer = 0;
+	uint32_t m_stateVector[5][5];
+	int m_boatAttempts = 0;
 };

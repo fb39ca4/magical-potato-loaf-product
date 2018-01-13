@@ -8,7 +8,7 @@ BridgeActuator::BridgeActuator(hardware::ServoMotor& motorNE, hardware::ServoMot
 	warningLight(false);
 }
 
-bool BridgeActuator::boatCrossing(Direction in, Direction out) {
+void BridgeActuator::boatCrossing(Direction in, Direction out) {
 	Direction newSWPosition = Direction::None;
 	Direction newNEPosition = Direction::None;
 	if (in == Direction::South) {
@@ -70,6 +70,26 @@ bool BridgeActuator::boatCrossing(Direction in, Direction out) {
 	}
 }
 
+void BridgeActuator::pedCrossing() {
+	Direction newSWPosition = Direction::None;
+	Direction newNEPosition = Direction::None;
+	if (m_pedNS) {
+		m_pedNS = false;
+		newNEPosition = Direction::West;
+		newSWPosition = Direction::East;
+	}
+	else {
+		m_pedNS = true;
+		newNEPosition = Direction::South;
+		newSWPosition = Direction::North;
+	}
+	if ((m_bridgeNEPosition != newNEPosition) || (m_bridgeSWPosition != newSWPosition)) {
+		m_bridgeNEPosition = newNEPosition;
+		m_bridgeSWPosition = newSWPosition;
+		m_state = 1;
+	}
+}
+
 void BridgeActuator::warningLight(bool on) {
 	digitalWrite(13, on);
 }
@@ -77,18 +97,18 @@ void BridgeActuator::warningLight(bool on) {
 
 bool BridgeActuator::setSW(Direction dir) {
 	int angle = 0;
-	if (dir == Direction::North) angle = 0;
-	if (dir == Direction::East) angle = 45;
-	if (dir == Direction::South) angle = 90;
-	if (dir == Direction::West) angle = 135;
+	if (dir == Direction::North) angle = 135;
+	if (dir == Direction::East) angle = 90;
+	if (dir == Direction::South) angle = 45;
+	if (dir == Direction::West) angle = 180;
 	return m_motorSW.setPosition(angle);
 }
 bool BridgeActuator::setNE(Direction dir) {
 	int angle = 0;
-	if (dir == Direction::North) angle = 0;
-	if (dir == Direction::East) angle = 45;
-	if (dir == Direction::South) angle = 90;
-	if (dir == Direction::West) angle = 135;
+	if (dir == Direction::North) angle = 20;
+	if (dir == Direction::East) angle = 155;
+	if (dir == Direction::South) angle = 110;
+	if (dir == Direction::West) angle = 65;
 	return m_motorNE.setPosition(angle);
 }
 
