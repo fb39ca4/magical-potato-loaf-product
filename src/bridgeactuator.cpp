@@ -19,7 +19,7 @@ void BridgeActuator::boatCrossing(Direction in, Direction out) {
 			newSWPosition = Direction::North;
 			newNEPosition = Direction::South;
 		}
-		else if (out == Direction::West) {
+		else if (out == Direction::East) {
 			newSWPosition = Direction::North;
 			newNEPosition = Direction::West;
 		}
@@ -64,8 +64,8 @@ void BridgeActuator::boatCrossing(Direction in, Direction out) {
 		}
 	}
 	if ((m_bridgeNEPosition != newNEPosition) || (m_bridgeSWPosition != newSWPosition)) {
-		m_bridgeNEPosition = newNEPosition;
-		m_bridgeSWPosition = newSWPosition;
+		if (newNEPosition) m_bridgeNEPosition = newNEPosition;
+		if (newSWPosition) m_bridgeSWPosition = newSWPosition;
 		m_state = 1;
 	}
 }
@@ -95,23 +95,31 @@ void BridgeActuator::warningLight(bool on) {
 }
 
 
+
+bool BridgeActuator::setNE(Direction dir) {
+	int angle = 0;
+	/*if (dir == Direction::North) angle = 20;
+	if (dir == Direction::East) angle = 155;
+	if (dir == Direction::South) angle = 110;
+	if (dir == Direction::West) angle = 65;*/
+	if (dir == Direction::North) angle = 0;
+	if (dir == Direction::East) angle = 180;
+	if (dir == Direction::South) angle = 120;
+	if (dir == Direction::West) angle = 60;
+	return m_motorNE.setPosition(angle);
+}
 bool BridgeActuator::setSW(Direction dir) {
 	int angle = 0;
-	if (dir == Direction::North) angle = 135;
+	/*if (dir == Direction::North) angle = 135;
 	if (dir == Direction::East) angle = 90;
 	if (dir == Direction::South) angle = 45;
+	if (dir == Direction::West) angle = 180;*/
+	if (dir == Direction::North) angle = 120;
+	if (dir == Direction::East) angle = 60;
+	if (dir == Direction::South) angle = 0;
 	if (dir == Direction::West) angle = 180;
 	return m_motorSW.setPosition(angle);
 }
-bool BridgeActuator::setNE(Direction dir) {
-	int angle = 0;
-	if (dir == Direction::North) angle = 20;
-	if (dir == Direction::East) angle = 155;
-	if (dir == Direction::South) angle = 110;
-	if (dir == Direction::West) angle = 65;
-	return m_motorNE.setPosition(angle);
-}
-
 void BridgeActuator::tick() {
 	switch (m_state) {
 	case 0:
